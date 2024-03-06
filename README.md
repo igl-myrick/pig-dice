@@ -14,8 +14,14 @@ Expect: newLobby = { player1: { currentScore: 0, isTurn: false }, player2: { cur
 
 Describe: Lobby.prototype.updateScore
 
-Test: It should add to a player's currentScore value.
+Test: It should add to the current player's currentScore value.
 Code:
 let newLobby = new Lobby();
-newLobby.updateScore("player2", 6)
+newLobby.updateScore(6)
 Expect: newLobby = { player1: { currentScore: 0, isTurn: false }, player2: { currentScore: 6, isTurn: true } }
+
+Describe: rollDie
+
+Test: It should return a random number between 1 and 6.
+Code: rollDie();
+Expect: 5
