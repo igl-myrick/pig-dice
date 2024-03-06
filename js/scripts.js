@@ -21,3 +21,9 @@ Lobby.prototype.updateScore = function(numToAdd) {
     this.player2.currentScore = this.player2.currentScore + numToAdd; 
   }
 };
+
+// program business logic
+function rollDie() {
+  let result = Math.floor(Math.random() * 6)
+  return result + 1;
+}
