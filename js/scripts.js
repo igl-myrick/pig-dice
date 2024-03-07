@@ -23,7 +23,23 @@ Lobby.prototype.updateScore = function(numToAdd) {
 };
 
 // program business logic
+let newLobby = new Lobby();
+
 function rollDie() {
   let result = Math.floor(Math.random() * 6)
   return result + 1;
 }
+
+// ui logic
+function handleFormSubmission(e) {
+  e.preventDefault();
+  const playerSelection = document.getElementById("selection");
+  playerSelection.remove();
+  document.querySelectorAll(".hidden").forEach(function(element) {
+    element.classList.remove("hidden");
+  });
+}
+
+window.addEventListener("load", function() {
+  document.querySelector("form").addEventListener("submit", handleFormSubmission)
+})
