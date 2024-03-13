@@ -7,7 +7,7 @@
   <link href="css/styles.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-  <div class="container">
+  <div class="container-fluid">
     <h1>Pig Dice</h1>
     <div id="selection">
       <p>Choose who starts:</p>
@@ -26,10 +26,18 @@
     <div id="game" class="hidden">
       <div class="row">
         <div class="col-md-6" id="player1">
-  
+          <h2>Player 1</h2>
+          <p>Current Score:</p>
+          <h4 id="player-1-score">0</h4>
+          <p>Last roll: <span id="player-1-history"></span></p>
+          <button type="button" class="btn btn-success hidden" id="player-1-button">Roll the dice</button>
         </div>
         <div class="col-md-6" id="player2">
-  
+          <h2>Player 2</h2>
+          <p>Current Score:</p>
+          <h4 id="player-2-score">0</h4>
+          <p>Last roll: <span id="player-2-history"></span></p>
+          <button type="button" class="btn btn-success hidden" id="player-2-button">Roll the dice</button>
         </div>
       </div>
     </div>
