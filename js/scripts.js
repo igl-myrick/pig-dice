@@ -33,13 +33,65 @@ function rollDie() {
 // ui logic
 function handleFormSubmission(e) {
   e.preventDefault();
-  const playerSelection = document.getElementById("selection");
-  playerSelection.remove();
-  document.querySelectorAll(".hidden").forEach(function(element) {
-    element.classList.remove("hidden");
-  });
+  const playerSelection = document.querySelector("input[name='order']:checked").value;
+  if (playerSelection === "player-1") {
+    newLobby.setTurn("player1")
+  } else {
+    newLobby.setTurn("player2")
+  }
+  let currentTurn = newLobby.player1.isTurn;
+  if (currentTurn === true) {
+    document.getElementById("player-1-button").classList.remove("hidden");
+  } else {
+    document.getElementById("player-2-button").classList.remove("hidden");
+  }
+  const selectionDiv = document.getElementById("selection");
+  selectionDiv.remove();
+  const gameDiv = document.getElementById("game"); 
+  gameDiv.classList.remove("hidden");
+}
+
+function changeTurn() {
+  let currentTurn = newLobby.player1.isTurn;
+  const player1Button = document.getElementById("player-1-button");
+  const player2Button = document.getElementById("player-2-button");
+  if (currentTurn === true) {
+    player1Button.classList.add("hidden");
+    player2Button.classList.remove("hidden");
+    newLobby.setTurn("player2");
+  } else {
+    player2Button.classList.add("hidden");
+    player1Button.classList.remove("hidden");
+    newLobby.setTurn("player1");
+  }
+}
+
+function handleDieRoll() {
+  const currentPlayer = newLobby.player1.isTurn;
+  let userRoll = rollDie();
+  if (currentPlayer === true) {
+    document.getElementById("player-1-history").innerText = userRoll;
+    if (userRoll > 1) {
+      newLobby.player1.currentScore = newLobby.player1.currentScore + userRoll;
+      const scoreDisplay = document.getElementById("player-1-score");
+      scoreDisplay.innerText = newLobby.player1.currentScore;
+    } else {
+      changeTurn();
+    }
+  } else {
+    document.getElementById("player-2-history").innerText = userRoll;
+    if (userRoll > 1) {
+      newLobby.player2.currentScore = newLobby.player2.currentScore + userRoll;
+      const scoreDisplay = document.getElementById("player-2-score");
+      scoreDisplay.innerText = newLobby.player2.currentScore;
+    } else {
+      changeTurn();
+    }
+  }
 }
 
 window.addEventListener("load", function() {
-  document.querySelector("form").addEventListener("submit", handleFormSubmission)
-})
+  document.querySelector("form").addEventListener("submit", handleFormSubmission);
+  document.getElementById("player-1-button").addEventListener("click", handleDieRoll);
+  document.getElementById("player-2-button").addEventListener("click", handleDieRoll);
+});
