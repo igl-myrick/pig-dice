@@ -88,10 +88,29 @@ function handleDieRoll() {
       changeTurn();
     }
   }
+  if (newLobby.player1.currentScore >= 100 || newLobby.player2.currentScore >= 100) {
+    const player1Button = document.getElementById("player-1-button");
+    const player2Button = document.getElementById("player-2-button");
+    player1Button.classList.add("hidden");
+    player2Button.classList.add("hidden");
+    const gameOverDiv = document.getElementById("game-over")
+    const resultsDiv = document.getElementById("results")
+    gameOverDiv.classList.remove("hidden");
+    if (newLobby.player1.currentScore >= 100) {
+      resultsDiv.innerText = "Player 1 wins";
+    } else {
+      resultsDiv.innerText = "Player 2 wins";
+    }
+  }
+}
+
+function resetGame() {
+  location.reload();
 }
 
 window.addEventListener("load", function() {
   document.querySelector("form").addEventListener("submit", handleFormSubmission);
   document.getElementById("player-1-button").addEventListener("click", handleDieRoll);
   document.getElementById("player-2-button").addEventListener("click", handleDieRoll);
+  document.getElementById("reset-button").addEventListener("click", resetGame);
 });

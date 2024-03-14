@@ -9,6 +9,7 @@
 <body>
   <div class="container-fluid">
     <h1>Pig Dice</h1>
+    <hr>
     <div id="selection">
       <p>Choose who starts:</p>
       <form>
@@ -38,6 +39,14 @@
           <h4 id="player-2-score">0</h4>
           <p>Last roll: <span id="player-2-history"></span></p>
           <button type="button" class="btn btn-success hidden" id="player-2-button">Roll the dice</button>
+        </div>
+      </div>
+    </div>
+    <div class="hidden" id="game-over">
+      <div class="row">
+        <div class="col-md-12">
+          <h2 id="results"></h2><br>
+          <button type="button" class="btn btn-success" id="reset-button">Reset</button>
         </div>
       </div>
     </div>
