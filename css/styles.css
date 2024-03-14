@@ -3,6 +3,10 @@ body {
   font-size: 20px;
 }
 
+.container-fluid {
+  width: 80%;
+}
+
 h1 {
   font-size: 60px;
 }
