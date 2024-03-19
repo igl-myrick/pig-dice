@@ -1,7 +1,7 @@
 // Lobby business logic
 function Lobby() {
-  this.player1 = { overallScore: 0, turnScore: 0, isTurn: true };
-  this.player2 = { overallScore: 0, turnScore: 0, isTurn: false };
+  this.player1 = { overallScore: 0, turnScore: 0, lastRoll: 0, isTurn: true };
+  this.player2 = { overallScore: 0, turnScore: 0, lastRoll: 0, isTurn: false };
 }
 
 Lobby.prototype.setTurn = function(player) {
@@ -14,21 +14,45 @@ Lobby.prototype.setTurn = function(player) {
   }
 };
 
-Lobby.prototype.updateScore = function() {
+Lobby.prototype.addOverallScore = function() {
   if (this.player1.isTurn === true) {
     this.player1.overallScore = this.player1.overallScore + this.player1.turnScore;
   } else {
-    this.player2.overallScore = this.player2.overallScore + this.player1.turnScore; 
+    this.player2.overallScore = this.player2.overallScore + this.player2.turnScore;
   }
-};
+}
+
+Lobby.prototype.addTurnScore = function(numToAdd) {
+  if (this.player1.isTurn === true) {
+    this.player1.turnScore = this.player1.turnScore + numToAdd;
+  } else {
+    this.player2.turnScore = this.player2.turnScore + numToAdd;
+  }
+}
+
+Lobby.prototype.handleTurn = function() {
+  const userRoll = Math.floor(Math.random() * 6) + 1;
+  if (this.player1.isTurn === true) {
+    if (userRoll !== 1) {
+      this.addTurnScore(userRoll);
+      return userRoll;
+    } else {
+      this.player1.turnScore = 0;
+      return 1;
+    }
+  } else {
+    if (userRoll !== 1) {
+      this.addTurnScore(userRoll);
+      return userRoll;
+    } else {
+      this.player2.turnScore = 0;
+      return 1;
+    }
+  }
+}
 
 // program business logic
 let newLobby = new Lobby();
-
-function rollDie() {
-  let result = Math.floor(Math.random() * 6)
-  return result + 1;
-}
 
 // ui logic
 function handleFormSubmission(e) {
@@ -68,28 +92,23 @@ function changeTurn() {
   }
 }
 
-function handleDieRoll() {
-  const currentPlayer = newLobby.player1.isTurn;
-  let userRoll = rollDie();
-  const player1ScoreDisplay = document.getElementById("player-1-score");
-  const player2ScoreDisplay = document.getElementById("player-2-score");
-  if (currentPlayer === true) {
-    document.getElementById("player-1-history").innerText = userRoll;
-    if (userRoll > 1) {
-      newLobby.player1.turnScore = newLobby.player1.turnScore + userRoll;
-      player1ScoreDisplay.innerText = newLobby.player1.overallScore + newLobby.player1.turnScore;
-    } else {
-      player1ScoreDisplay.innerText = newLobby.player1.overallScore;
+function displayDieRoll() {
+  const turnResult = newLobby.handleTurn();
+  if (newLobby.player1.isTurn === true) {
+    document.getElementById("player-1-history").innerText = turnResult;
+    if (turnResult === 1) {
+      document.getElementById("player-1-score").innerText = newLobby.player1.overallScore;
       changeTurn();
+    } else {
+      document.getElementById("player-1-score").innerText = newLobby.player1.overallScore + newLobby.player1.turnScore;
     }
   } else {
-    document.getElementById("player-2-history").innerText = userRoll;
-    if (userRoll > 1) {
-      newLobby.player2.turnScore = newLobby.player2.turnScore + userRoll;
-      player2ScoreDisplay.innerText = newLobby.player2.overallScore + newLobby.player2.turnScore;
-    } else {
-      player2ScoreDisplay.innerText = newLobby.player2.overallScore;
+    document.getElementById("player-2-history").innerText = turnResult;
+    if (turnResult === 1) {
+      document.getElementById("player-2-score").innerText = newLobby.player2.overallScore;
       changeTurn();
+    } else {
+      document.getElementById("player-2-score").innerText = newLobby.player2.overallScore + newLobby.player2.turnScore;
     }
   }
   if ((newLobby.player1.overallScore + newLobby.player1.turnScore) >= 100 || (newLobby.player2.overallScore + newLobby.player2.turnScore) >= 100) {
@@ -109,12 +128,11 @@ function handleDieRoll() {
 }
 
 function handleHold() {
-  const currentPlayer = newLobby.player1.isTurn;
-  if (currentPlayer === true) {
-    newLobby.player1.overallScore = newLobby.player1.overallScore + newLobby.player1.turnScore;
+  if (newLobby.player1.isTurn) {
+    newLobby.addOverallScore();
     changeTurn();
   } else {
-    newLobby.player2.overallScore = newLobby.player2.overallScore + newLobby.player2.turnScore;
+    newLobby.addOverallScore();
     changeTurn();
   }
 }
@@ -125,9 +143,9 @@ function resetGame() {
 
 window.addEventListener("load", function() {
   document.querySelector("form").addEventListener("submit", handleFormSubmission);
-  document.getElementById("player-1-roll").addEventListener("click", handleDieRoll);
+  document.getElementById("player-1-roll").addEventListener("click", displayDieRoll);
   document.getElementById("player-1-hold").addEventListener("click", handleHold);
-  document.getElementById("player-2-roll").addEventListener("click", handleDieRoll);
+  document.getElementById("player-2-roll").addEventListener("click", displayDieRoll);
   document.getElementById("player-2-hold").addEventListener("click", handleHold);
   document.getElementById("reset-button").addEventListener("click", resetGame);
 });
