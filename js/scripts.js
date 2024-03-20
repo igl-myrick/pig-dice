@@ -75,24 +75,18 @@ function changeTurn() {
 
 function displayDieRoll() {
   const turnResult = newLobby.handleTurn();
-  if (newLobby.currentPlayer === "player1") {
-    document.getElementById("player-1-history").innerText = turnResult;
-    if (turnResult === 1) {
-      document.getElementById("player-1-score").innerText = newLobby.player1.overallScore;
-      changeTurn();
-    } else {
-      document.getElementById("player-1-score").innerText = newLobby.player1.overallScore + newLobby.player1.turnScore;
-    }
+  let playerHistoryID = (newLobby.currentPlayer === "player1") ? "player-1-history" : "player-2-history";
+  let playerScoreID = (newLobby.currentPlayer === "player1") ? "player-1-score" : "player-2-score";
+  document.getElementById(playerHistoryID).innerText = turnResult;
+  if (turnResult === 1) {
+    document.getElementById(playerScoreID).innerText = newLobby[newLobby.currentPlayer].overallScore;
+    changeTurn();
   } else {
-    document.getElementById("player-2-history").innerText = turnResult;
-    if (turnResult === 1) {
-      document.getElementById("player-2-score").innerText = newLobby.player2.overallScore;
-      changeTurn();
-    } else {
-      document.getElementById("player-2-score").innerText = newLobby.player2.overallScore + newLobby.player2.turnScore;
-    }
+    document.getElementById(playerScoreID).innerText = newLobby[newLobby.currentPlayer].overallScore + newLobby[newLobby.currentPlayer].turnScore;
   }
-  if ((newLobby.player1.overallScore + newLobby.player1.turnScore) >= 100 || (newLobby.player2.overallScore + newLobby.player2.turnScore) >= 100) {
+  const player1Win = newLobby.player1.overallScore + newLobby.player1.turnScore >= 100;
+  const player2Win = newLobby.player2.overallScore + newLobby.player2.turnScore >= 100;
+  if (player1Win || player2Win) {
     const player1Button = document.getElementById("player-1-buttons");
     const player2Button = document.getElementById("player-2-buttons");
     player1Button.classList.add("hidden");
@@ -100,11 +94,7 @@ function displayDieRoll() {
     const gameOverDiv = document.getElementById("game-over");
     const resultsDiv = document.getElementById("results");
     gameOverDiv.classList.remove("hidden");
-    if ((newLobby.player1.overallScore + newLobby.player1.turnScore) >= 100) {
-      resultsDiv.innerText = "Player 1 wins";
-    } else {
-      resultsDiv.innerText = "Player 2 wins";
-    }
+    resultsDiv.innerText = "Player " + ((player1Win) ? "1" : "2") + " wins";
   }
 }
 
