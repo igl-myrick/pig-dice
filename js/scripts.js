@@ -1,53 +1,36 @@
 // Lobby business logic
 function Lobby() {
-  this.player1 = { overallScore: 0, turnScore: 0, lastRoll: 0, isTurn: true };
-  this.player2 = { overallScore: 0, turnScore: 0, lastRoll: 0, isTurn: false };
+  this.player1 = { overallScore: 0, turnScore: 0 };
+  this.player2 = { overallScore: 0, turnScore: 0 };
+  this.currentPlayer = "player1";
 }
 
 Lobby.prototype.setTurn = function(player) {
   if (player === "player1") {
-    this.player1.isTurn = true;
-    this.player2.isTurn = false;
+    this.currentPlayer = "player1";
   } else {
-    this.player1.isTurn = false;
-    this.player2.isTurn = true;
+    this.currentPlayer = "player2";
   }
 };
 
 Lobby.prototype.addOverallScore = function() {
-  if (this.player1.isTurn === true) {
-    this.player1.overallScore = this.player1.overallScore + this.player1.turnScore;
-  } else {
-    this.player2.overallScore = this.player2.overallScore + this.player2.turnScore;
-  }
+  this[this.currentPlayer].overallScore = this[this.currentPlayer].overallScore + this[this.currentPlayer].turnScore;
 }
 
 Lobby.prototype.addTurnScore = function(numToAdd) {
-  if (this.player1.isTurn === true) {
-    this.player1.turnScore = this.player1.turnScore + numToAdd;
-  } else {
-    this.player2.turnScore = this.player2.turnScore + numToAdd;
-  }
+  // shorthand of next line
+  // this[this.currentPlayer].turnScore += numToAdd;
+  this[this.currentPlayer].turnScore = this[this.currentPlayer].turnScore + numToAdd;
 }
 
 Lobby.prototype.handleTurn = function() {
   const userRoll = Math.floor(Math.random() * 6) + 1;
-  if (this.player1.isTurn === true) {
-    if (userRoll !== 1) {
-      this.addTurnScore(userRoll);
-      return userRoll;
-    } else {
-      this.player1.turnScore = 0;
-      return 1;
-    }
+  if (userRoll !== 1) {
+    this.addTurnScore(userRoll);
+    return userRoll;
   } else {
-    if (userRoll !== 1) {
-      this.addTurnScore(userRoll);
-      return userRoll;
-    } else {
-      this.player2.turnScore = 0;
-      return 1;
-    }
+    this[this.currentPlayer].turnScore = 0;
+    return 1;
   }
 }
 
@@ -59,12 +42,11 @@ function handleFormSubmission(e) {
   e.preventDefault();
   const playerSelection = document.querySelector("input[name='order']:checked").value;
   if (playerSelection === "player-1") {
-    newLobby.setTurn("player1")
+    newLobby.setTurn("player1");
   } else {
-    newLobby.setTurn("player2")
+    newLobby.setTurn("player2");
   }
-  let currentTurn = newLobby.player1.isTurn;
-  if (currentTurn === true) {
+  if (newLobby.currentPlayer === "player1") {
     document.getElementById("player-1-buttons").classList.remove("hidden");
   } else {
     document.getElementById("player-2-buttons").classList.remove("hidden");
@@ -76,10 +58,9 @@ function handleFormSubmission(e) {
 }
 
 function changeTurn() {
-  let currentTurn = newLobby.player1.isTurn;
   const player1Button = document.getElementById("player-1-buttons");
   const player2Button = document.getElementById("player-2-buttons");
-  if (currentTurn === true) {
+  if (newLobby.currentPlayer === "player1") {
     newLobby.player1.turnScore = 0;
     player1Button.classList.add("hidden");
     player2Button.classList.remove("hidden");
@@ -94,7 +75,7 @@ function changeTurn() {
 
 function displayDieRoll() {
   const turnResult = newLobby.handleTurn();
-  if (newLobby.player1.isTurn === true) {
+  if (newLobby.currentPlayer === "player1") {
     document.getElementById("player-1-history").innerText = turnResult;
     if (turnResult === 1) {
       document.getElementById("player-1-score").innerText = newLobby.player1.overallScore;
@@ -116,8 +97,8 @@ function displayDieRoll() {
     const player2Button = document.getElementById("player-2-buttons");
     player1Button.classList.add("hidden");
     player2Button.classList.add("hidden");
-    const gameOverDiv = document.getElementById("game-over")
-    const resultsDiv = document.getElementById("results")
+    const gameOverDiv = document.getElementById("game-over");
+    const resultsDiv = document.getElementById("results");
     gameOverDiv.classList.remove("hidden");
     if ((newLobby.player1.overallScore + newLobby.player1.turnScore) >= 100) {
       resultsDiv.innerText = "Player 1 wins";
@@ -128,13 +109,8 @@ function displayDieRoll() {
 }
 
 function handleHold() {
-  if (newLobby.player1.isTurn) {
-    newLobby.addOverallScore();
-    changeTurn();
-  } else {
-    newLobby.addOverallScore();
-    changeTurn();
-  }
+  newLobby.addOverallScore();
+  changeTurn();
 }
 
 function resetGame() {
