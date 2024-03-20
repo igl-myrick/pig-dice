@@ -3,6 +3,8 @@ function Lobby() {
   this.player1 = { overallScore: 0, turnScore: 0 };
   this.player2 = { overallScore: 0, turnScore: 0 };
   this.currentPlayer = "player1";
+  this.playerHasWon = false;
+  this.gameWinner = "";
 }
 
 Lobby.prototype.setTurn = function(player) {
@@ -31,6 +33,15 @@ Lobby.prototype.handleTurn = function() {
   } else {
     this[this.currentPlayer].turnScore = 0;
     return 1;
+  }
+}
+
+Lobby.prototype.determineWinner = function() {
+  const player1Win = this.player1.overallScore + this.player1.turnScore >= 100;
+  const player2Win = this.player2.overallScore + this.player2.turnScore >= 100;
+  if (player1Win || player2Win) {
+    this.playerHasWon = true;
+    this.gameWinner = this.currentPlayer;
   }
 }
 
@@ -84,9 +95,8 @@ function displayDieRoll() {
   } else {
     document.getElementById(playerScoreID).innerText = newLobby[newLobby.currentPlayer].overallScore + newLobby[newLobby.currentPlayer].turnScore;
   }
-  const player1Win = newLobby.player1.overallScore + newLobby.player1.turnScore >= 100;
-  const player2Win = newLobby.player2.overallScore + newLobby.player2.turnScore >= 100;
-  if (player1Win || player2Win) {
+  newLobby.determineWinner();
+  if (newLobby.playerHasWon) {
     const player1Button = document.getElementById("player-1-buttons");
     const player2Button = document.getElementById("player-2-buttons");
     player1Button.classList.add("hidden");
@@ -94,7 +104,7 @@ function displayDieRoll() {
     const gameOverDiv = document.getElementById("game-over");
     const resultsDiv = document.getElementById("results");
     gameOverDiv.classList.remove("hidden");
-    resultsDiv.innerText = "Player " + ((player1Win) ? "1" : "2") + " wins";
+    resultsDiv.innerText = "Player " + ((newLobby.gameWinner === "player1") ? "1" : "2") + " wins";
   }
 }
 
