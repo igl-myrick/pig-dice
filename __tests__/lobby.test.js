@@ -40,3 +40,12 @@ describe('Lobby.prototype.addOverallScore', () => {
     expect(newLobby.player1.overallScore).toEqual(6);
   });
 });
+
+describe('Lobby.prototype.addTurnScore', () => {
+
+  test('should correctly add to the turnScore value of the current player', () => {
+    const newLobby = new Lobby();
+    newLobby.addTurnScore(6);
+    expect(newLobby.player1.turnScore).toEqual(6);
+  });
+});
