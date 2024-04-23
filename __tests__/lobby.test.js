@@ -49,3 +49,13 @@ describe('Lobby.prototype.addTurnScore', () => {
     expect(newLobby.player1.turnScore).toEqual(6);
   });
 });
+
+describe('Lobby.prototype.handleTurn', () => {
+
+  test('should return a number between 1 and 6', () => {
+    const newLobby = new Lobby();
+    const roll = newLobby.handleTurn();
+    expect(roll).toBeGreaterThan(0)
+    expect(roll).toBeLessThan(7)
+  });
+});
