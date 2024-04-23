@@ -15,12 +15,12 @@ Lobby.prototype.setTurn = function(player) {
 };
 
 Lobby.prototype.addOverallScore = function() {
-  this[this.currentPlayer].overallScore = this[this.currentPlayer].overallScore + this[this.currentPlayer].turnScore;
-}
+  this[this.currentPlayer].overallScore += this[this.currentPlayer].turnScore;
+};
 
 Lobby.prototype.addTurnScore = function(numToAdd) {
   this[this.currentPlayer].turnScore += numToAdd;
-}
+};
 
 Lobby.prototype.handleTurn = function() {
   const userRoll = Math.floor(Math.random() * 6) + 1;
@@ -31,7 +31,7 @@ Lobby.prototype.handleTurn = function() {
     this[this.currentPlayer].turnScore = 0;
     return 1;
   }
-}
+};
 
 Lobby.prototype.determineWinner = function() {
   const player1Win = this.player1.overallScore + this.player1.turnScore >= 100;
@@ -40,4 +40,4 @@ Lobby.prototype.determineWinner = function() {
     this.playerHasWon = true;
     this.gameWinner = this.currentPlayer;
   }
-}
+};
