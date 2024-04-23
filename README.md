@@ -36,25 +36,3 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-## Tests
-
-Describe: Lobby
-
-Test: It should create a Lobby object that contains two player objects with a overallScore number value, a turnScore value, and an isTurn boolean value.
-Code: let newLobby = new Lobby();
-Expect: newLobby = { player1: { overallScore: 0, isTurn: true }, player2: { overallScore: 0, turnScore: 0, isTurn: false } }
-
-Describe: Lobby.prototype.setTurn
-
-Test: It should set the isTurn value of a player to true depending on the method's parameter input, while setting the opposite player's value to false.
-Code: 
-let newLobby = new Lobby();
-newLobby.setTurn("player2");
-Expect: newLobby = { player1: { overallScore: 0, turnScore: 0, isTurn: false }, player2: { overallScore: 0, turnScore: 0, isTurn: true } }
-
-Describe: rollDie
-
-Test: It should return a random number between 1 and 6.
-Code: rollDie();
-Expect: 5
