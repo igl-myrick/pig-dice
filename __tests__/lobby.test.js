@@ -59,3 +59,15 @@ describe('Lobby.prototype.handleTurn', () => {
     expect(roll).toBeLessThan(7)
   });
 });
+
+describe('Lobby.prototype.determineWinner', () => {
+
+  test('should correctly determine if a player has won', () => {
+    const newLobby = new Lobby();
+    newLobby.player1.overallScore = 97;
+    newLobby.player1.turnScore = 4;
+    newLobby.player2.overallScore = 72;
+    newLobby.determineWinner();
+    expect(newLobby.playerHasWon).toEqual(true);
+  });
+});
