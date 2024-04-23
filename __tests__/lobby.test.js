@@ -21,3 +21,12 @@ describe('Lobby', () => {
     expect(newLobby.gameWinner).toEqual("");
   });
 });
+
+describe('Lobby.prototype.setTurn', () => {
+
+  test('should correctly change the current player value of the lobby', () => {
+    const newLobby = new Lobby();
+    newLobby.setTurn("player2");
+    expect(newLobby.currentPlayer).toEqual("player2");
+  });
+});
