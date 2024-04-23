@@ -30,3 +30,13 @@ describe('Lobby.prototype.setTurn', () => {
     expect(newLobby.currentPlayer).toEqual("player2");
   });
 });
+
+describe('Lobby.prototype.addOverallScore', () => {
+
+  test('should correctly add to the overallScore value of the current player', () => {
+    const newLobby = new Lobby();
+    newLobby.player1.turnScore = 6;
+    newLobby.addOverallScore();
+    expect(newLobby.player1.overallScore).toEqual(6);
+  });
+});
